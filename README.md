@@ -1,5 +1,6 @@
 # Twitter-Media-Downloder
 
+![alt text](https://github.com/Freshm4at/Twitter-Media-Downloder/blob/main/readme%20assets/downloading_in_progress.png)
 ![alt text](https://github.com/Freshm4at/Twitter-Media-Downloder/blob/main/readme%20assets/media_downloaded.png)
 
 TMD or Twitter Media Download is a python script to download user's media from his favorite tweets and retweets.
@@ -46,5 +47,3 @@ additionnal arguments:
   -k "BEARER_KEY", --key "BEARER_KEY"         Your bearer key, given from Twitter.Inc in the developper plateform. 
 
 ```
-
-![alt text](https://github.com/Freshm4at/Twitter-Media-Downloder/blob/main/readme%20assets/downloading_in_progress.png)
