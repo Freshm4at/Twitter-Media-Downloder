@@ -26,7 +26,7 @@ $ python TMD.py
 
 ## Usage
 ```
-$ python -k "YOUR_BEARER_KEY" TARGET_USER
+$ python TDM.py -k "YOUR_BEARER_KEY" TARGET_USER
 usage:  [-k] user
 
 positional arguments:
