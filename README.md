@@ -32,6 +32,9 @@ $ python TMD.py
 TDM will create a folder named after the target user in TDM project folder. 
 Videos and images are respectively store in a subfolder.
 
+## TDM download media since which date ?
+Twitter uses a limit in the data collect. This limitation is 200 tweets by request. But TDM pass throught this limitation and go get all favorite tweets and retweets.
+
 ex : "./Asmongold/images" and "./Asmongold/videos"
 
 ## Usage
