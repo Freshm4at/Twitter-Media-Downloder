@@ -1,5 +1,5 @@
 # Twitter-Media-Downloder
-TMD or Twitter Media Download is a python script to download user's media from his favorite tweets and retweet.
+TMD or Twitter Media Download is a python script to download user's media from his favorite tweets and retweets.
 Downloaded medias include images and videos from fav and retweet tweets.
 
 TDM also downloads media from quoted fav/rt tweets.
