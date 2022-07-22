@@ -25,7 +25,10 @@ $ python TMD.py
 ```
 
 ## Where media are stored?
-TDM will create a folder named after the target user and store videos and images, respectively in a folder
+TDM will create a folder named after the target user in TDM project folder. 
+Videos and images are respectively store in a subfolder.
+
+ex : "./Asmongold/images" and "./Asmongold/videos"
 
 ## Usage
 ```
