@@ -24,6 +24,9 @@ $ pip install -r requirements.txt
 $ python TMD.py 
 ```
 
+## Where media are stored?
+TDM will create a folder named after the target user and store videos and images, respectively in a folder
+
 ## Usage
 ```
 $ python TDM.py -k "YOUR_BEARER_KEY" TARGET_USER
