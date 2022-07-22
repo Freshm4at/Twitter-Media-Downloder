@@ -4,9 +4,6 @@ Downloaded medias include images and videos from fav and retweet tweets.
 
 TDM also downloads media from quoted fav/rt tweets.
 
-## Setup 
-
-
 ## Setup
 1) Clone the repository
 
