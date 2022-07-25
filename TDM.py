@@ -1,4 +1,3 @@
-
 import requests
 from colorama import init,Fore,Style
 import shutil
@@ -27,6 +26,18 @@ def save_file(url,ddir):
             with open(op_dir, 'wb') as f:
                 shutil.copyfileobj(r.raw, f)
 
+def fillList(videos,images,media):
+    mediaType = media[0]["type"]
+    if mediaType == "video":
+        videos.append(media[0]['video_info']['variants'][0]['url'])
+    elif mediaType == "photo":
+        if len(media)>1:
+            for elem in media:
+                images.append(elem["media_url"])
+        else: 
+            images.append(media[0]["media_url"])
+    return [videos,images]     
+
 
 def getUrl(lenght,user,autorization):
     videos = []
@@ -43,24 +54,22 @@ def getUrl(lenght,user,autorization):
         "include_rts": "true",
     }
     lastid = 0
+    
     for i in range(1,lenght):
         if (i!=1):
             LauchPayloadVideoFAV["max_id"] = lastid
         tweets = GetJson(LauchPayloadVideoFAV,fav,autorization)
         for tweet in tweets:
             if "media" in tweet["entities"]:
-                mediaType = [x["type"] for x in tweet["extended_entities"]["media"]][0]
-                if mediaType == "video":
-                    videos.append(tweet['extended_entities']['media'][0]['video_info']['variants'][0]['url'])
-                elif mediaType == "photo":
-                    images.append(tweet["entities"]["media"][0]["media_url"])         
-            if "quoted_status" in tweet:
-                if "media" in tweet["quoted_status"]["entities"]:
-                    mediaType = [x["type"] for x in tweet["quoted_status"]["extended_entities"]["media"]][0]
-                    if mediaType == "video":
-                        videos.append(tweet["quoted_status"]['extended_entities']['media'][0]['video_info']['variants'][0]['url'])
-                    elif mediaType == "photo":
-                        images.append(tweet["quoted_status"]["entities"]["media"][0]["media_url"])            
+                media = tweet['extended_entities']['media']
+                temp = fillList(videos,images,media)
+                videos = temp[0]
+                images = temp[1]
+            if "quoted_status" in tweet and "media" in tweet["quoted_status"]["entities"]:
+                media = tweet["quoted_status"]["extended_entities"]["media"]
+                temp = fillList(videos,images,media)
+                videos = temp[0]
+                images = temp[1]          
             lastid = tweet["id"]
         i=i+1
 
@@ -71,18 +80,16 @@ def getUrl(lenght,user,autorization):
         for tweet in tweets:
             if "retweeted_status" in tweet:
                 if "media" in tweet["retweeted_status"]["entities"]:
-                    mediaType = [x["type"] for x in tweet["retweeted_status"]["extended_entities"]["media"]][0]
-                    if mediaType == "video":
-                        videos.append(tweet["retweeted_status"]['extended_entities']['media'][0]['video_info']['variants'][0]['url'])
-                    elif mediaType == "photo":
-                        images.append(tweet["retweeted_status"]["entities"]["media"][0]["media_url"])         
+                    media = tweet["retweeted_status"]["extended_entities"]["media"]  
+                    temp = fillList(videos,images,media)
+                    videos = temp[0]
+                    images = temp[1]     
                 if "quoted_status" in tweet:
                     if "media" in tweet["retweeted_status"]["quoted_status"]["entities"]:
-                        mediaType = [x["type"] for x in tweet["retweeted_status"]["quoted_status"]["extended_entities"]["media"]][0]
-                        if mediaType == "video":
-                            videos.append(tweet["retweeted_status"]["quoted_status"]['extended_entities']['media'][0]['video_info']['variants'][0]['url'])
-                        elif mediaType == "photo":
-                            images.append(tweet["retweeted_status"]["quoted_status"]["entities"]["media"][0]["media_url"])
+                        media = tweet["retweeted_status"]["quoted_status"]["extended_entities"]["media"] 
+                        temp = fillList(videos,images,media)
+                        videos = temp[0]
+                        images = temp[1] 
             lastid = tweet["id"]
         i=i+1
     return [images,videos]
@@ -119,6 +126,3 @@ for x in [videosNumber]:
             bar()
 print(" ")
 print('['+Fore.GREEN+'+'+Style.RESET_ALL+'] '+Fore.GREEN,videosNumber, 'videos'+Style.RESET_ALL+ ' successfully saved in ...\\'+args.user+'\\videos" !\n')
-
-
-
