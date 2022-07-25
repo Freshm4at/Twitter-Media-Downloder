@@ -25,7 +25,7 @@ $ pip install -r requirements.txt
 3) Run Twitter-Media-Downloder
 
 ```
-$ python TMD.py 
+$ python TDM.py 
 ```
 
 ## Where media are stored?
