@@ -117,7 +117,7 @@ for x in [imagesNumber]:
             save_file(elem,Path+"\\images")
             bar()
 print(" ")
-print('['+Fore.GREEN+'+'+Style.RESET_ALL+'] '+Fore.GREEN, imagesNumber,'videos'+Style.RESET_ALL+ ' successfully saved in ...\\'+args.user+'\\images" !\n')
+print('['+Fore.GREEN+'+'+Style.RESET_ALL+'] '+Fore.GREEN, imagesNumber,'images'+Style.RESET_ALL+ ' successfully saved in ...\\'+args.user+'\\images" !\n')
 print('['+Fore.YELLOW +'...' +Style.BRIGHT+Style.RESET_ALL+']' + 'Downloading videos, wait ...\n')
 for x in [videosNumber]:
     with alive_bar(x) as bar:
