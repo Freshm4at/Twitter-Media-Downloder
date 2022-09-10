@@ -4,6 +4,8 @@ import shutil
 import os
 import argparse
 from alive_progress import alive_bar
+import time
+
 
 def GetJson(payload,url,autorization) :
     headers = {"Authorization": f"Bearer {autorization}"}
@@ -18,24 +20,25 @@ def GetJson(payload,url,autorization) :
         )
         tweets = []
     return tweets
-def save_file(url,ddir):
-    if url:
-        name = url.split('/')[-1].split("?")[0]
-        op_dir = os.path.join(ddir, name)
-        with requests.get(url, stream=True) as r:
+def save_file(tweet,ddir):
+    if tweet[0]:
+        name = tweet[0].split('/')[-1].split("?")[0]
+        name_extented = name.split(".")
+        op_dir = os.path.join(ddir, tweet[1]+"."+name_extented[1])
+        with requests.get(tweet[0], stream=True) as r:
             with open(op_dir, 'wb') as f:
                 shutil.copyfileobj(r.raw, f)
 
-def fillList(videos,images,media):
+def fillList(videos,images,media,ts):
     mediaType = media[0]["type"]
     if mediaType == "video":
-        videos.append(media[0]['video_info']['variants'][0]['url'])
+        videos.append([media[0]['video_info']['variants'][0]['url'],ts])
     elif mediaType == "photo":
         if len(media)>1:
             for elem in media:
-                images.append(elem["media_url"])
+                images.append([elem["media_url"],ts])
         else: 
-            images.append(media[0]["media_url"])
+            images.append([media[0]["media_url"],ts])
     return [videos,images]     
 
 
@@ -60,16 +63,17 @@ def getUrl(lenght,user,autorization):
             LauchPayloadVideoFAV["max_id"] = lastid
         tweets = GetJson(LauchPayloadVideoFAV,fav,autorization)
         for tweet in tweets:
+            ts = time.strftime('%Y-%m-%d_%H-%M-%S', time.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
             if "media" in tweet["entities"]:
                 media = tweet['extended_entities']['media']
-                temp = fillList(videos,images,media)
+                temp = fillList(videos,images,media,ts)
                 videos = temp[0]
                 images = temp[1]
             if "quoted_status" in tweet and "media" in tweet["quoted_status"]["entities"]:
                 media = tweet["quoted_status"]["extended_entities"]["media"]
-                temp = fillList(videos,images,media)
+                temp = fillList(videos,images,media,ts)
                 videos = temp[0]
-                images = temp[1]          
+                images = temp[1]        
             lastid = tweet["id"]
         i=i+1
 
@@ -79,17 +83,18 @@ def getUrl(lenght,user,autorization):
         tweets = GetJson(LauchPayloadRT,rt,autorization)
         for tweet in tweets:
             if "retweeted_status" in tweet:
+                ts = time.strftime('%Y-%m-%d_%H-%M-%S', time.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
                 if "media" in tweet["retweeted_status"]["entities"]:
                     media = tweet["retweeted_status"]["extended_entities"]["media"]  
-                    temp = fillList(videos,images,media)
+                    temp = fillList(videos,images,media,ts)
                     videos = temp[0]
-                    images = temp[1]     
+                    images = temp[1] 
                 if "quoted_status" in tweet:
                     if "media" in tweet["retweeted_status"]["quoted_status"]["entities"]:
                         media = tweet["retweeted_status"]["quoted_status"]["extended_entities"]["media"] 
-                        temp = fillList(videos,images,media)
+                        temp = fillList(videos,images,media,ts)
                         videos = temp[0]
-                        images = temp[1] 
+                        images = temp[1]
             lastid = tweet["id"]
         i=i+1
     return [images,videos]
